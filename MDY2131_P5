@@ -1,0 +1,19 @@
+--CASO 1
+SELECT
+    CARRERAID AS "IDENTIFICACION DE LA CARRERA",
+    COUNT(CARRERAID) AS "TOTAL ALUMNOS MATRICULADOS",
+    'Le CORRESPONDEN'||TO_CHAR(COUNT(CARRERAID)*30200,'$999G999G999')||' del presupuesto total asignado para publicidad.' AS "MONTO POR PUBLICIDAD"
+FROM ALUMNO
+GROUP BY CARRERAID
+ORDER BY  COUNT(CARRERAID) DESC,CARRERAID;
+----------------------------------------------------------------
+--CASO 2
+SELECT
+    CARRERAID,
+    COUNT(CARRERAID)
+FROM ALUMNO
+WHERE COUNT(CARRERAID) > 4
+GROUP BY CARRERAID
+ORDER BY CARRERAID;
+----------------------------------------------------------------
+--Caso 3
