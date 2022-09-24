@@ -18,8 +18,13 @@ ORDER BY CARRERAID;
 ----------------------------------------------------------------
 --Caso 3
 SELECT
-    AVG(RUN_JEFE) AS "RUN JEFE SIN DV",
+    TO_CHAR(RUN_JEFE,'99G999G999') AS "RUN JEFE SIN DV",
     COUNT(RUN_EMP) AS "TOTAL DE EMPLEADOS A SU CARGO",
-    MAX(SALARIO)
+    TO_CHAR(MAX(SALARIO),'$999G999G999') AS "SALARIO MAXIMO",
+    COUNT(RUN_EMP) * 10 ||'% del Salario Máximo' AS "PORCENTAJE DE BONIFICACIÓN",
+    TO_CHAR(MAX(SALARIO) * (COUNT(RUN_EMP)) * 10 /100, '$999G999G999' )AS "BONIFICACIÓN"
 FROM EMPLEADO
+WHERE RUN_JEFE IS NOT NULL
 GROUP BY RUN_JEFE;
+----------------------------------------------------------------
+--CASO 4
