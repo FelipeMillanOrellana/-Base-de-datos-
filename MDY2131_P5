@@ -2,6 +2,8 @@ SELECT * FROM CARRERA;
 SELECT * FROM ALUMNO;
 SELECT * FROM EMPLEADO;
 SELECT * FROM ESCOLARIDAD_EMP;
+SELECT * FROM TITULO;
+SELECT * FROM PRESTAMO;
 -----------------------------------------------------------------
 --CASO 1
 SELECT
@@ -51,3 +53,21 @@ GROUP BY ID_ESCOLARIDAD
 ORDER BY COUNT(RUN_EMP) DESC;
 -----------------------------------------------------------------
 --CASO 5
+SELECT
+    TITULOID AS "CODIGO DEL LIBRO",
+    COUNT(EJEMPLARID) AS "TOTAL DE VECES SOLICITADO",
+    (CASE WHEN COUNT(EJEMPLARID) = 1 THEN 'No se requiere nuevos ejemplares'
+    WHEN COUNT(EJEMPLARID) BETWEEN 2 AND 3 THEN 'Se requiere comprar 1 nuevos ejemplares'
+    WHEN COUNT(EJEMPLARID) BETWEEN 4 AND 5 THEN 'Se requiere comprar 2 nuevos ejemplares'
+    WHEN COUNT(EJEMPLARID) > 5 THEN 'Se requiere comprar 4 nuevos ejemplares'END) AS "SUGERENCIA"
+FROM PRESTAMO 
+GROUP BY TITULOID
+ORDER BY COUNT(EJEMPLARID) DESC;
+--NOTA, SYSDATE MENOS UN AÑO
+-----------------------------------------------------------------
+--CASO 6
+SELECT 
+    TO_CHAR(RUN_EMP,'99G999G999') AS "RUN EMPLEADO",
+    TO_CHAR (FECHA_INI_PRESTAMO, 'mm/yyyy')
+FROM PRESTAMO
+WHERE EXTRACT(YEAR FROM FECHA_INI_PRESTAMO) IN 2021;
