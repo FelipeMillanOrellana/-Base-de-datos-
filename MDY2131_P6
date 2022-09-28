@@ -1,0 +1,12 @@
+SELECT * FROM CLIENTE;
+--------------------------------------------------------
+SELECT
+    cli.TO_CHAR(NUMRUN,'99G999G999')||'-'||
+    cli.DVRUN AS "RUN CLIENTE",
+    cli.PNOMBRE || ' ' ||
+    cli.SNOMBRE || ' ' ||
+    cli.APPATERNO || ' ' ||
+    cli.APMATERNO AS "NOMBRE CLIENTE",
+    cli.COD_PROF_OFIC
+FROM CLIENTES cli
+    JOIN PROFESION_OFICIO pro ON cli.COD_PROF_OFIC = pro.COD_PROF_OFIC;
