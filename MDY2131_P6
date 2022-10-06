@@ -8,10 +8,31 @@ SELECT
     cli.SNOMBRE || ' ' ||
     cli.APPATERNO || ' ' ||
     cli.APMATERNO AS "NOMBRE CLIENTE",
-    po.nombre_prof_ofic,
-    TO_CHAR(FECHA_NACIMIENTO, 'DD "de" Month')
+    po.nombre_prof_ofic AS "PROFESION/OFICIO",
+    TO_CHAR(FECHA_NACIMIENTO, 'DD "de" Month') AS "DIA DE CUMPLEAÑOS "
 FROM CLIENTE cli
     JOIN PROFESION_OFICIO po ON cli.COD_PROF_OFIC = po.cod_prof_ofic
 WHERE EXTRACT(MONTH FROM FECHA_NACIMIENTO) = 09
 ORDER BY TO_CHAR(FECHA_NACIMIENTO, 'DD "de" Month'), cli.APPATERNO DESC;
---------------------------------------------------------
+------------------------------------------------------------------------------------
+--CASO 2
+SELECT
+    TO_CHAR(NUMRUN,'99G999G999')||'-'||
+    cli.DVRUN AS "RUN CLIENTE",
+    cli.PNOMBRE || ' ' ||
+    cli.SNOMBRE || ' ' ||
+    cli.APPATERNO || ' ' ||
+    cli.APMATERNO AS "NOMBRE CLIENTE",
+    TO_CHAR(MONTO_SOLICITADO,'$999G999G999') AS "MONTO SOLICITADO CREDITOS",
+    TO_CHAR(MONTO_SOLICITADO*0.012,'$999G999G999') AS "TOTAL PESOS TODOSUMA"
+FROM CLIENTE cli JOIN CREDITO_CLIENTE cc ON cli.nro_cliente = cc.nro_cliente
+WHERE EXTRACT(YEAR FROM FECHA_SOLIC_CRED)=2021
+ORDER BY TO_CHAR(MONTO_SOLICITADO,'$999G999G999')ASC,cli.APPATERNO DESC,cli.numrun;
+------------------------------------------------------------------------------------
+SELECT 
+COUNT
+FROM CLIENTE cli JOIN CREDITO_CLIENTE cc ON cli.nro_cliente = cc.nro_cliente;
+------------------------------------------------------------------------------------
+SELECT fecha_solic_cred FROM CREDITO_CLIENTE
+WHERE EXTRACT(YEAR FROM FECHA_SOLIC_CRED)=2021;
+SELECT * FROM CREDITO;
