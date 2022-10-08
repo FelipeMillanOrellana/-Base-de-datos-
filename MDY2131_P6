@@ -1,8 +1,10 @@
 SELECT * FROM CLIENTE;
+SELECT * FROM CREDITO;
+SELECT * FROM CREDITO_CLIENTE;
 --------------------------------------------------------
 --CASO 1
 SELECT
-    TO_CHAR(NUMRUN,'99G999G999')||'-'||
+    TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
     cli.DVRUN AS "RUN CLIENTE",
     cli.PNOMBRE || ' ' ||
     cli.SNOMBRE || ' ' ||
@@ -17,7 +19,7 @@ ORDER BY TO_CHAR(FECHA_NACIMIENTO, 'DD "de" Month'), cli.APPATERNO DESC;
 ------------------------------------------------------------------------------------
 --CASO 2
 SELECT
-    TO_CHAR(NUMRUN,'99G999G999')||'-'||
+    TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
     cli.DVRUN AS "RUN CLIENTE",
     cli.PNOMBRE || ' ' ||
     cli.SNOMBRE || ' ' ||
@@ -29,10 +31,7 @@ FROM CLIENTE cli JOIN CREDITO_CLIENTE cc ON cli.nro_cliente = cc.nro_cliente
 WHERE EXTRACT(YEAR FROM FECHA_SOLIC_CRED)=2021
 ORDER BY TO_CHAR(MONTO_SOLICITADO,'$999G999G999')ASC,cli.APPATERNO DESC,cli.numrun;
 ------------------------------------------------------------------------------------
-SELECT 
-COUNT
-FROM CLIENTE cli JOIN CREDITO_CLIENTE cc ON cli.nro_cliente = cc.nro_cliente;
+SELECT
+    TO_CHAR (FECHA_SOLIC_CRED, 'mm/yyyy') AS "MES TRANSACCIÓN"
+FROM CREDITO_CLIENTE
 ------------------------------------------------------------------------------------
-SELECT fecha_solic_cred FROM CREDITO_CLIENTE
-WHERE EXTRACT(YEAR FROM FECHA_SOLIC_CRED)=2021;
-SELECT * FROM CREDITO;
