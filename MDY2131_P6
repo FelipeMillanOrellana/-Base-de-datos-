@@ -31,7 +31,13 @@ FROM CLIENTE cli JOIN CREDITO_CLIENTE cc ON cli.nro_cliente = cc.nro_cliente
 WHERE EXTRACT(YEAR FROM FECHA_SOLIC_CRED)=2021
 ORDER BY TO_CHAR(MONTO_SOLICITADO,'$999G999G999')ASC,cli.APPATERNO DESC,cli.numrun;
 ------------------------------------------------------------------------------------
+--CASO3
 SELECT
-    TO_CHAR (FECHA_SOLIC_CRED, 'mm/yyyy') AS "MES TRANSACCIÓN"
-FROM CREDITO_CLIENTE
+    TO_CHAR (FECHA_SOLIC_CRED, 'mm/yyyy') AS "MES TRANSACCIÓN",
+    cre.NOMBRE_CREDITO AS "TIPO CREDITO",
+    TO_CHAR(cc.monto_solicitado, '$999G999G999') AS "MONTO SOLICITADO CREDITO"
+FROM CREDITO_CLIENTE cc JOIN CREDITO cre ON cc.COD_CREDITO = cre.COD_CREDITO
+WHERE EXTRACT(YEAR FROM FECHA_SOLIC_CRED)=2021
+ORDER BY TO_CHAR (FECHA_SOLIC_CRED, 'mm/yyyy'), cre.NOMBRE_CREDITO;
 ------------------------------------------------------------------------------------
+-------------------------------------------
