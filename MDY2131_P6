@@ -1,4 +1,4 @@
-SESELECT * FROM CLIENTE;
+SELECT * FROM CLIENTE;
 SELECT * FROM CREDITO;
 SELECT * FROM CREDITO_CLIENTE;
 --------------------------------------------------------
@@ -14,7 +14,7 @@ SELECT
     TO_CHAR(FECHA_NACIMIENTO, 'DD "de" Month') AS "DIA DE CUMPLEAÑOS "
 FROM CLIENTE cli
     JOIN PROFESION_OFICIO po ON cli.COD_PROF_OFIC = po.cod_prof_ofic
-WHERE EXTRACT(MONTH FROM FECHA_NACIMIENTO) = 09
+WHERE EXTRACT(MONTH FROM FECHA_NACIMIENTO) =  EXTRACT(MONTH FROM SYSDATE) - 1
 ORDER BY TO_CHAR(FECHA_NACIMIENTO, 'DD "de" Month'), cli.APPATERNO DESC;
 ------------------------------------------------------------------------------------
 --CASO 2
@@ -28,7 +28,7 @@ SELECT
     TO_CHAR(MONTO_SOLICITADO,'$999G999G999') AS "MONTO SOLICITADO CREDITOS",
     TO_CHAR(MONTO_SOLICITADO*0.012,'$999G999G999') AS "TOTAL PESOS TODOSUMA"
 FROM CLIENTE cli JOIN CREDITO_CLIENTE cc ON cli.nro_cliente = cc.nro_cliente
-WHERE EXTRACT(YEAR FROM FECHA_SOLIC_CRED)=2021
+WHERE EXTRACT(YEAR FROM FECHA_OTORGA_CRED) = EXTRACT(YEAR FROM SYSDATE) - 1
 ORDER BY TO_CHAR(MONTO_SOLICITADO,'$999G999G999')ASC,cli.APPATERNO DESC,cli.numrun;
 ------------------------------------------------------------------------------------
 --CASO3
@@ -66,3 +66,35 @@ WHERE (CASE WHEN pic.MONTO_TOTAL_AHORRADO BETWEEN 100000 and 1000000 THEN 'BRONC
     WHEN pic.MONTO_TOTAL_AHORRADO BETWEEN 8000001 and 15000000 THEN 'GOLD'
     WHEN pic.MONTO_TOTAL_AHORRADO > 15000000 THEN 'PATINUM' END) IS NOT NULL
 ORDER BY cli.APPATERNO asc,TO_CHAR(pic.MONTO_TOTAL_AHORRADO, '$999G999G999') DESC;
+------------------------------------------------------------------------------------
+--CASO 5
+SELECT
+    TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
+    cli.DVRUN AS "RUN CLIENTE",
+    cli.PNOMBRE || ' ' ||
+    cli.SNOMBRE || ' ' ||
+    cli.APPATERNO || ' ' ||
+    cli.APMATERNO AS "NOMBRE CLIENTE"
+FROM CLIENTE cli;    
+------------------------------------------------------------------------------------
+--CASO 6
+--Informe 1
+SELECT
+    EXTRACT(YEAR FROM SYSDATE),
+    TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
+    cli.DVRUN AS "RUN CLIENTE",
+    cli.PNOMBRE || ' ' ||
+    cli.SNOMBRE || ' ' ||
+    cli.APPATERNO || ' ' ||
+    cli.APMATERNO AS "NOMBRE CLIENTE"
+FROM CLIENTE cli;   
+
+--Informe 2
+SELECT
+    TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
+    cli.DVRUN AS "RUN CLIENTE",
+    cli.PNOMBRE || ' ' ||
+    cli.SNOMBRE || ' ' ||
+    cli.APPATERNO || ' ' ||
+    cli.APMATERNO AS "NOMBRE CLIENTE"
+FROM CLIENTE cli;  
