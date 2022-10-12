@@ -65,6 +65,7 @@ ORDER BY cli.APPATERNO asc,TO_CHAR(pic.MONTO_TOTAL_AHORRADO, '$999G999G999') DES
 ------------------------------------------------------------------------------------
 --CASO 5
 SELECT
+    EXTRACT(YEAR FROM SYSDATE),
     TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
     cli.DVRUN AS "RUN CLIENTE",
     cli.PNOMBRE || ' ' ||
@@ -79,15 +80,15 @@ ORDER BY cli.APPATERNO asc;
 --CASO 6
 --Informe 1
 SELECT
-    EXTRACT(YEAR FROM SYSDATE),
     TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
     cli.DVRUN AS "RUN CLIENTE",
     cli.PNOMBRE || ' ' ||
     cli.SNOMBRE || ' ' ||
     cli.APPATERNO || ' ' ||
-    cli.APMATERNO AS "NOMBRE CLIENTE"
-FROM CLIENTE cli;   
-
+    cli.APMATERNO AS "NOMBRE CLIENTE",
+    NRO_SOLIC_CREDITO,
+    TO_CHAR(MONTO_CREDITO, '$999G999G999')
+FROM CLIENTE cli JOIN CREDITO_CLIENTE cc ON cli.NRO_CLIENTE = cc.NRO_CLIENTE;
 --Informe 2
 SELECT
     TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
