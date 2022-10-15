@@ -2,6 +2,7 @@ SELECT * FROM CLIENTE;
 SELECT * FROM CREDITO;
 SELECT * FROM CREDITO_CLIENTE;
 SELECT * FROM producto_inversion_cliente;
+SELECT *FROM producto_inversion;
 --------------------------------------------------------
 --CASO 1
 SELECT
@@ -46,7 +47,7 @@ FROM CREDITO_CLIENTE cc JOIN CREDITO cre ON cc.COD_CREDITO = cre.COD_CREDITO
 WHERE EXTRACT(YEAR FROM FECHA_OTORGA_CRED) = EXTRACT(YEAR FROM SYSDATE) - 1
 ORDER BY "MES TRANSACCIÓN", "TIPO CREDITO";
 ------------------------------------------------------------------------------------
---CASO4
+--CASO 4
 SELECT
     TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
     cli.DVRUN AS "RUN CLIENTE",
@@ -66,14 +67,14 @@ ORDER BY cli.APPATERNO asc;
 ------------------------------------------------------------------------------------
 --CASO 5
 SELECT
-    EXTRACT(YEAR FROM SYSDATE)-1 AS "AÑO TRIBUTARIO",
+    EXTRACT(YEAR FROM SYSDATE) AS "AÑO TRIBUTARIO",
     TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
     cli.DVRUN AS "RUN CLIENTE",
     cli.PNOMBRE || ' ' ||
-    cli.SNOMBRE || ' ' ||
-    SUBSTR(cli.appaterno,1,1) || '. ' ||
+    SUBSTR(cli.SNOMBRE,1,1) || '. ' ||
+    cli.appaterno|| ' ' ||
     cli.APMATERNO AS "NOMBRE CLIENTE",
-    SUM(pic.cod_prod_inv),
+    COUNT(pic.cod_prod_inv),
     TO_CHAR(SUM(pic.MONTO_TOTAL_AHORRADO), '$999G999G999') AS "MONTO TOTAL AHORRADO"
 FROM CLIENTE cli 
     JOIN PRODUCTO_INVERSION_CLIENTE pic ON cli.NRO_CLIENTE = pic.NRO_CLIENTE
@@ -81,7 +82,6 @@ FROM CLIENTE cli
 WHERE pi.cod_prod_inv >= 30
 GROUP BY cli.NUMRUN,cli.DVRUN,cli.PNOMBRE,cli.SNOMBRE,cli.appaterno,cli.APMATERNO
 ORDER BY cli.APPATERNO asc;
---CONTACT,GRUOP BY,SUM
 ------------------------------------------------------------------------------------
 --CASO 6
 --Informe 1
@@ -92,9 +92,13 @@ SELECT
     cli.SNOMBRE || ' ' ||
     cli.APPATERNO || ' ' ||
     cli.APMATERNO AS "NOMBRE CLIENTE",
-    NRO_SOLIC_CREDITO,
-    TO_CHAR(MONTO_CREDITO, '$999G999G999')
-FROM CLIENTE cli JOIN CREDITO_CLIENTE cc ON cli.NRO_CLIENTE = cc.NRO_CLIENTE;
+    COUNT(NRO_SOLIC_CREDITO) AS "TOTAL CREDITOS SOLICITADOS",
+    TO_CHAR(SUM(MONTO_CREDITO), '$999G999G999') AS "MONTO TOTAL CREDITOS"
+WHERE EXTRACT(YEAR FROM SYSDATE) - 1
+FROM CLIENTE cli JOIN CREDITO_CLIENTE cc ON cli.NRO_CLIENTE = cc.NRO_CLIENTE
+GROUP BY cli.NUMRUN,cli.DVRUN,cli.PNOMBRE,cli.SNOMBRE,cli.appaterno,cli.APMATERNO
+ORDER BY cli.APPATERNO;
+--fecha_solicitud_credito
 --Informe 2
 SELECT
     TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
