@@ -1,0 +1,16 @@
+SELECT
+    TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
+    cli.DVRUN AS "RUN CLIENTE",
+    cli.PNOMBRE || ' ' ||
+    cli.SNOMBRE || ' ' ||
+    cli.APPATERNO || ' ' ||
+    cli.APMATERNO AS "NOMBRE CLIENTE",
+    TO_CHAR(cli.FECHA_NACIMIENTO, 'DD "de" Month') AS "DIA DE CUMPLEAÑOS",
+    sr.direccion ||'/'||
+    reg.nombre_region
+FROM cliente cli
+    JOIN comuna com ON cli.cod_comuna = com.cod_comuna
+    JOIN provincia pro ON com.cod_provincia = pro.cod_provincia
+    JOIN region reg ON pro.cod_region = reg.cod_region
+    JOIN sucursal_retail sr ON com.cod_comuna = sr.cod_comuna
+    ORDER BY cli.PNOMBRE;
