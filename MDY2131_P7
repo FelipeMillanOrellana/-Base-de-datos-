@@ -14,6 +14,7 @@ SELECT
 FROM cliente cli
     JOIN comuna com ON cli.cod_comuna = com.cod_comuna AND cli.cod_provincia = com.cod_provincia AND cli.cod_region = com.cod_region
     JOIN sucursal_retail sr ON com.cod_comuna = sr.cod_comuna AND sr.cod_provincia = com.cod_provincia AND sr.cod_region = com.cod_region
+    WHERE EXTRACT(MONTH FROM CLI.FECHA_NACIMIENTO) = EXTRACT(MONTH FROM SYSDATE)-1
     ORDER BY "DIA DE CUMPLEAÑOS" ASC, cli.APPATERNO;
 ------------------------------------------------------------------------------------------
 --CASO 2
@@ -74,7 +75,7 @@ SELECT
     cli.APPATERNO || ' ' ||
     cli.APMATERNO AS "NOMBRE CLIENTE",
     TO_CHAR(SUM(ttc.MONTO_TOTAL_TRANSACCION), '$999G999G999') AS "MONTO AVANCES/SUPER AVANCES",
-    (CASE WHEN SUM(ttc.MONTO_TOTAL_TRANSACCION BETWEEN 0 and 99999 THEN 'SIN CATEGORIZACION'
+    (CASE WHEN SUM(ttc.MONTO_TOTAL_TRANSACCION) BETWEEN 0 and  999999 THEN 'SIN CATEGORIZAR'
     WHEN SUM(ttc.MONTO_TOTAL_TRANSACCION) BETWEEN 100000 and 1000000 THEN 'BRONCE'
     WHEN SUM(ttc.MONTO_TOTAL_TRANSACCION) BETWEEN 1000001 and 4000000 THEN 'PLATA'
     WHEN SUM(ttc.MONTO_TOTAL_TRANSACCION) BETWEEN 4000001 and 8000000 THEN 'SILVER'
@@ -84,3 +85,34 @@ FROM CLIENTE cli
     JOIN TARJETA_CLIENTE tc ON (cli.numrun = tc.numrun)
     JOIN TRANSACCION_TARJETA_CLIENTE ttc ON (tc.NRO_TARJETA = ttc.NRO_TARJETA)
 GROUP BY cli.NUMRUN, cli.DVRUN, cli.PNOMBRE, cli.SNOMBRE, cli.APPATERNO, cli.APMATERNO;
+-------------------------------------------------------------------------------------------
+--CASO 5
+SELECT 
+    TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
+    cli.DVRUN AS "RUN CLIENTE",
+    cli.PNOMBRE || ' ' ||
+    cli.SNOMBRE || ' ' ||
+    cli.APPATERNO || ' ' ||
+    cli.APMATERNO AS "NOMBRE CLIENTE"
+FROM CLIENTE cli;    
+---------------------------------------------------------------------------------------------
+--CASO 6
+--INFORME 1
+SELECT 
+    TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
+    cli.DVRUN AS "RUN CLIENTE",
+    cli.PNOMBRE || ' ' ||
+    cli.SNOMBRE || ' ' ||
+    cli.APPATERNO || ' ' ||
+    cli.APMATERNO AS "NOMBRE CLIENTE"
+FROM CLIENTE cli;
+
+--INFORME 2
+SELECT 
+    TO_CHAR(cli.NUMRUN,'99G999G999')||'-'||
+    cli.DVRUN AS "RUN CLIENTE",
+    cli.PNOMBRE || ' ' ||
+    cli.SNOMBRE || ' ' ||
+    cli.APPATERNO || ' ' ||
+    cli.APMATERNO AS "NOMBRE CLIENTE"
+FROM CLIENTE cli;
