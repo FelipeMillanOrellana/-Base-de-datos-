@@ -1,0 +1,23 @@
+SELECT * FROM ATENCION;
+SELECT * FROM CARGO;
+SELECT * FROM ESPECIALIDAD;
+SELECT * FROM ESPECIALIDAD_MEDICO;
+SELECT * FROM MEDICO;
+SELECT * FROM PACIENTE;
+SELECT * FROM pago_atencion;
+SELECT * FROM porc_descto_3ra_edad;
+SELECT * FROM salud;
+SELECT * FROM tipo_salud;
+SELECT * FROM unidad;
+--------------------------------------------------------
+-- CASO 1
+SELECT 
+    ts.descripcion ||','||
+    sal.descripcion AS "SISTEMA_SALUD",
+    COUNT(at.ate_id) aS "TOTAL ATENCIONES"
+FROM salud sal
+    JOIN tipo_salud ts ON (sal.tipo_sal_id = ts.tipo_sal_id)
+    JOIN paciente pac ON (sal.sal_id = pac.sal_id)
+    JOIN atencion at ON (pac.pac_run = at.pac_run)
+WHERE ts.descripcion IN ('Fonasa','Isapre')                    
+GROUP BY ts.descripcion,sal.descripcion;
