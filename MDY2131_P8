@@ -13,7 +13,7 @@ SELECT * FROM unidad;
 -- CASO 1
 SELECT 
     ts.descripcion ||','||
-    s.descripcion AS "SISTEMA_SALUD",
+    s.descripcion AS "SISTEMA SALUD",
     COUNT(a.ate_id) AS "TOTAL ATENCIONES"
 FROM atencion a
     JOIN paciente p ON (a.pac_run = p.pac_run)
@@ -32,4 +32,31 @@ HAVING COUNT(a.ate_id) >
                       WHERE EXTRACT(YEAR FROM a.fecha_atencion) = EXTRACT(YEAR FROM SYSDATE) 
                       AND EXTRACT(MONTH FROM a.fecha_atencion) = 9
                       GROUP BY ts.descripcion,s.descripcion)
-ORDER BY TIPO_SALUD,DSecripcion ;
+ORDER BY "SISTEMA SALUD";
+
+--Beneficio Pacientes tercera edad
+SELECT 
+    a.pac_run,
+    ROUND((SYSDATE - p.fecha_nacimiento)/365)
+FROM ATENCION a   
+    JOIN PACIENTE p ON (a.pac_run=p.pac_run)
+    JOIN porc_descto_3ra_edad pd ON ROUND((SYSDATE - p.fecha_nacimiento)/365)
+                    BETWEEN pd.anno_ini AND pd.anno_ter
+WHERE EXTRACT(YEAR FROM a.fecha_atencion) = EXTRACT(YEAR FROM SYSDATE)
+AND ROUND((SYSDATE - p.fecha_nacimiento)/365) >= 65
+GROUP BY a.pac_run, SYSDATE - p.fecha_nacimiento,pd.porcentaje_descto
+HAVING COUNT (a.ate_id) > 4;
+
+--CASO 2
+SELECT
+    e.nombre AS "ESPECIALIDAD" ,
+    TO_CHAR(m.med_run,'99G999G999')||'-'||
+    m.dv_run AS "RUT",
+    m.PNOMBRE || ' ' ||
+    m.SNOMBRE || ' ' ||
+    m.APATERNO || ' ' ||
+    m.AMATERNO AS "MEDICO"
+FROM especialidad_medico em
+    JOIN medico m ON (em.med_run=m.med_run)
+    JOIN especialidad e ON (em.esp_id=e.esp_id)
+ORDER BY "ESPECIALIDAD",m.apaterno;
