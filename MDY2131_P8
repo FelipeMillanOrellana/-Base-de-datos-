@@ -36,27 +36,31 @@ ORDER BY "SISTEMA SALUD";
 
 --Beneficio Pacientes tercera edad
 SELECT 
-    a.pac_run,
-    ROUND((SYSDATE - p.fecha_nacimiento)/365)
+    TO_CHAR(p.pac_run,'999G999G999')||'-'||
+    p.DV_RUN AS "RUN",
+    ROUND((SYSDATE - p.fecha_nacimiento)/365) AS "EDAD",
+    'Le corresponde un '|| porcentaje_descto ||'% de descuento en la primera consulta del año 2020' AS "DESCUENTO"
 FROM ATENCION a   
     JOIN PACIENTE p ON (a.pac_run=p.pac_run)
     JOIN porc_descto_3ra_edad pd ON ROUND((SYSDATE - p.fecha_nacimiento)/365)
                     BETWEEN pd.anno_ini AND pd.anno_ter
 WHERE EXTRACT(YEAR FROM a.fecha_atencion) = EXTRACT(YEAR FROM SYSDATE)
 AND ROUND((SYSDATE - p.fecha_nacimiento)/365) >= 65
-GROUP BY a.pac_run, SYSDATE - p.fecha_nacimiento,pd.porcentaje_descto
+GROUP BY p.pac_run,p.DV_RUN, SYSDATE - p.fecha_nacimiento,pd.porcentaje_descto
 HAVING COUNT (a.ate_id) > 4;
 
 --CASO 2
-SELECT
-    e.nombre AS "ESPECIALIDAD" ,
+SELECT 
+    e.nombre AS "ESPECIALIDAD",
     TO_CHAR(m.med_run,'99G999G999')||'-'||
     m.dv_run AS "RUT",
     m.PNOMBRE || ' ' ||
     m.SNOMBRE || ' ' ||
     m.APATERNO || ' ' ||
     m.AMATERNO AS "MEDICO"
-FROM especialidad_medico em
+FROM  especialidad_medico em
     JOIN medico m ON (em.med_run=m.med_run)
     JOIN especialidad e ON (em.esp_id=e.esp_id)
-ORDER BY "ESPECIALIDAD",m.apaterno;
+GROUP BY e.nombre,m.med_run,m.dv_run,m.pnombre,m.snombre,m.apaterno,m.amaterno
+ORDER BY "ESPECIALIDAD", m.pnombre;
+--Intentento
