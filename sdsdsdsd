@@ -1,0 +1,40 @@
+--CASO 1
+SELECT
+    f.NUMFACTURA AS "NRO.FACTURA",
+    v.nombre AS "VENDEDOR",
+    TO_CHAR(f.total,'$999G999G999') AS "MONTO FACTURA",
+    SUM(f.total) AS "VENTA PROMEDIO MES ANTERIOR",
+    TO_CHAR(ROUND(v.comision*f.total),'$999G999G999') AS "COMISION VENTA"
+FROM FACTURA f
+    JOIN vendedor v ON (f.rutvendedor=v.rutvendedor)
+GROUP BY f.NUMFACTURA ,v.nombre,TO_CHAR(f.total,'$999G999G999'),TO_CHAR(ROUND(v.comision*f.total),'$999G999G999')  
+WHERE f.fecha =
+ORDER BY v.nombre;          
+
+--PARTE 2
+SELECT
+    f.NUMFACTURA AS "NRO FACTURA",
+    v.nombre AS "VENDEDOR",
+    v.rutvendedor,
+    TO_CHAR(f.fecha,'DD "de" MONTH "de" YYYY') AS "FECHA",
+    TO_CHAR(f.total,'$999G999G999') AS "MONTO FACTURA",
+    df.CANTIDAD,
+    b.descripcion
+FROM FACTURA f
+    JOIN vendedor v ON (f.rutvendedor=v.rutvendedor)
+    JOIN DETALLE_FACTURA df ON (f.numfactura=df.numfactura)
+    JOIN BANCO b ON (f.codbanco=b.codbanco) 
+ORDER BY v.nombre; 
+---------------------------------------------------------------------------------------
+--CASO 2
+SELECT
+    cli.RUTCLIENTE AS "RUT_CLIENTE",
+    cli.NOMBRE AS "NOMBRE_CLIENTE",
+    c.descripcion AS "DESCRIPCION",
+    COUNT(f.NUMFACTURA) AS "CANTIDAD FACTURAS",
+    TO_CHAR(cli.credito,'$999G999G999G999') AS "CREDITO"
+FROM CLIENTE cli
+    JOIN COMUNA c ON (cli.CODCOMUNA=c.CODCOMUNA)
+    JOIN FACTURA f ON (cli.rutcliente=f.rutcliente)
+GROUP BY cli.RUTCLIENTE, cli.NOMBRE, c.descripcion,cli.credito
+ORDER BY cli.rutcliente;
