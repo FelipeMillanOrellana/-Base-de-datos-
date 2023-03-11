@@ -10,3 +10,14 @@ Where id = x_id;
 Print x_NombreCompleto <> " " then 
 else if ( ) then ,
 end if; 
+--------------------------------------------------------
+Declare
+    x_nombreCompleto VARCHAR2(250);
+    x_edad NUMBER(2);
+    x_id NUMBER (3);
+BEGIN
+    Select nombre||" "||apelliudo,edad
+Into x_nombreCompleto,x_edad
+FROM CLIENTE
+Where id=x_id;
+dbms_output.put(x_nombreCompleto||"tiene"||x_edad||"años");
