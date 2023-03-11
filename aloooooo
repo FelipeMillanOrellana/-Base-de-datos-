@@ -1,0 +1,12 @@
+SELECT
+    nombre ||" "|| apellido,
+    edad
+Into
+    x_NombreCompleto,
+    x_edad 
+From Cliente
+Where id = x_id;
+----------------------
+Print x_NombreCompleto <> " " then 
+else if ( ) then ,
+end if; 
